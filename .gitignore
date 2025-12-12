@@ -1,0 +1,63 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+*.pnp.*
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+packages/*/dist/
+packages/*/build/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# Turbo
+.turbo/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Testing
+jest.config.js
+cypress/
+
+# Misc
+*.tgz
+*.zip

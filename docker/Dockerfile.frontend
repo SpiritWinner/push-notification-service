@@ -1,0 +1,21 @@
+FROM node:20-alpine
+
+RUN npm install -g pnpm
+
+WORKDIR /app
+
+# Копируем все файлы pnpm workspace
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
+# Устанавливаем все зависимости проекта
+RUN pnpm install --no-frozen-lockfile
+
+# Копируем исходный код фронтенда
+COPY packages/frontend/ ./packages/frontend/
+
+# Переходим в директорию фронтенда
+WORKDIR /app/packages/frontend
+
+EXPOSE 5173
+
+CMD ["pnpm", "run", "dev", "--host"]

@@ -1,0 +1,44 @@
+{
+  "name": "push-notification-service",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "install:all": "pnpm install",
+    "backend:dev": "pnpm --filter @monorepo/backend dev",
+    "frontend:dev": "pnpm --filter @monorepo/frontend dev",
+    "shared:build": "pnpm --filter @monorepo/shared build",
+    "docker:up": "docker-compose -f docker/docker-compose.yml up",
+    "docker:up:detached": "docker-compose -f docker/docker-compose.yml up -d",
+    "docker:down": "docker-compose -f docker/docker-compose.yml down",
+    "docker:build": "docker-compose -f docker/docker-compose.yml build",
+    "docker:logs": "docker-compose -f docker/docker-compose.yml logs -f",
+    "docker:logs:backend": "docker-compose -f docker/docker-compose.yml logs -f backend",
+    "docker:logs:frontend": "docker-compose -f docker/docker-compose.yml logs -f frontend",
+    "docker:logs:db": "docker-compose -f docker/docker-compose.yml logs -f db",
+    "docker:exec:backend": "docker-compose -f docker/docker-compose.yml exec backend sh",
+    "docker:exec:frontend": "docker-compose -f docker/docker-compose.yml exec frontend sh",
+    "docker:restart": "docker-compose -f docker/docker-compose.yml restart",
+    "docker:ps": "docker-compose -f docker/docker-compose.yml ps"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/node": "^20.19.26",
+    "prettier": "^3.7.4",
+    "turbo": "^1.13.4",
+    "vite": "^7.2.7",
+    "@vitejs/plugin-react": "^5.1.2",
+    "typescript": "~5.9.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.10.0"
+}

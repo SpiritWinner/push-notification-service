@@ -1,0 +1,38 @@
+FROM node:20-slim
+
+# Установка системных зависимостей
+RUN apt-get update && apt-get install -y \
+    openssl \
+    ca-certificates \
+    curl \
+    wget \
+    gnupg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Установка pnpm
+RUN npm install -g pnpm
+
+WORKDIR /app
+
+# Копируем корневые файлы pnpm
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
+# Копируем package.json бэкенда
+COPY packages/backend/package.json ./packages/backend/
+
+# Устанавливаем зависимости с pnpm
+RUN pnpm install --no-frozen-lockfile
+
+# Копируем prisma схему
+COPY packages/backend/prisma ./packages/backend/prisma/
+
+# Генерируем prisma client
+WORKDIR /app/packages/backend
+RUN npx prisma generate
+
+# Копируем остальной исходный код бэкенда
+COPY packages/backend/ ./packages/backend/
+
+EXPOSE 3000
+
+CMD ["pnpm", "run", "dev"]

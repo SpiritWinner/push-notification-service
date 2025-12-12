@@ -1,0 +1,39 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model devices {
+  user_id          String   @id
+  expo_push_token  String
+  platform         String?
+  app_version      String?
+  registered_at    DateTime @default(now())
+  last_active      DateTime @default(now())
+  device_name      String?
+  device_model     String?
+  token_updated_at DateTime @default(now())
+
+  notifications    notifications[]
+}
+
+model notifications {
+  id         Int      @id @default(autoincrement())
+  user_id    String?
+  title      String
+  body       String
+  data       Json?
+  type       String?
+  status     String?
+  ticket_id  String?
+  error      String?
+  timestamp  DateTime @default(now())
+  sent_at    DateTime @default(now())
+
+  devices    devices? @relation(fields: [user_id], references: [user_id])
+}

@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: pushdb
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 5
+      timeout: 5s
+  
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dev
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://postgres:123456@db:5432/pushdb
+      NODE_ENV: development
+      PORT: 3000
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ../:/app
+      - /app/node_modules
+    working_dir: /app/packages/backend
+    command: sh -c "npx prisma migrate deploy && pnpm run dev"
+  
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL: http://localhost:3000
+    volumes:
+      - ../packages/frontend:/app/packages/frontend
+      - /app/node_modules 
+    working_dir: /app/packages/frontend
+    command: pnpm run dev --host
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
